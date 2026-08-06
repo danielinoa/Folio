@@ -76,3 +76,7 @@ want to improve its implementation or API.
 ## Credits
 
 Folio is primarily the work of [Daniel Inoa](https://github.com/danielinoa).
+
+## License
+
+Folio is available under the [MIT License](LICENSE).
