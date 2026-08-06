@@ -5,6 +5,9 @@ import PackageDescription
 
 let package = Package(
     name: "Folio",
+    platforms: [
+        .iOS(.v18),
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -20,6 +23,10 @@ let package = Package(
         ),
         .testTarget(
             name: "FolioTests",
+            dependencies: ["Folio"]
+        ),
+        .testTarget(
+            name: "FolioPublicAPITests",
             dependencies: ["Folio"]
         ),
     ],
