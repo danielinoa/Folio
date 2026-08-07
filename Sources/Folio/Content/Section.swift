@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 /// An identified group of rows with optional typed header and footer descriptors.
 /// `FolioView` resolves each role separately by section ID and updates it in place.
 /// This lets section presentation change without reloading retained row cells.

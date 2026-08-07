@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A sizing contract for manually laid-out table-view cells at a proposed width.

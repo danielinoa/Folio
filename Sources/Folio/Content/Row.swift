@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A descriptor for one logical row and the concrete cell type that renders it.

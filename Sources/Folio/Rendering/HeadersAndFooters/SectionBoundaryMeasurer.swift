@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// Measures configured header and footer prototypes independently of display views.

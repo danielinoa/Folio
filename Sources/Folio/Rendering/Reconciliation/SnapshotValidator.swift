@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// Converts a `Folio` into validated row, header, and footer render state.

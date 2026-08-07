@@ -1,6 +1,4 @@
-//
-//  Created by Daniel Inoa on 8/3/26.
-//
+// Copyright © 2026 Daniel Inoa.
 
 import UIKit
 

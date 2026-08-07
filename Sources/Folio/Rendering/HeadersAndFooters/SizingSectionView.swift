@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A manual sizing contract for reusable section header and footer views.

@@ -1,4 +1,6 @@
 // swift-tools-version: 6.3
+// Copyright © 2026 Daniel Inoa.
+
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription

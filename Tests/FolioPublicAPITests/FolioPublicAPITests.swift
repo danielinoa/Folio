@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import Folio
 import Testing
 import UIKit

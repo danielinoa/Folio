@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A type-erased row paired with metadata for cell registration and identity validation.

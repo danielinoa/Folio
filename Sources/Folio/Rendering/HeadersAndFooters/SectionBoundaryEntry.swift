@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A type-erased section-boundary descriptor with reusable view metadata.

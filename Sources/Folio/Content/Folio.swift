@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 /// A complete description of the table's desired sections and rows at one moment.
 /// Rebuild it after state changes so `FolioView` can reconcile successive values
 /// by stable identities; section IDs must be unique and row IDs globally unique.

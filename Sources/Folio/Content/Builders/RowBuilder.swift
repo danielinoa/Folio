@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 /// Collects row descriptors from a declarative `Section` closure.
 /// It flattens ordinary Swift control flow into one ordered heterogeneous row array.
 /// This keeps snapshot construction concise without changing identity or rendering.

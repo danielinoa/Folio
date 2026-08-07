@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// The reusable UIKit shell that owns one typed header or footer content view.

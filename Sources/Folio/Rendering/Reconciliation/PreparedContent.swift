@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 import UIKit
 
 /// A validated snapshot with role-specific lookups and cumulative rendering state.

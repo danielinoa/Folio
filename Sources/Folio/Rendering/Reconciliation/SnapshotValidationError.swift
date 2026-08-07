@@ -1,3 +1,5 @@
+// Copyright © 2026 Daniel Inoa.
+
 /// An identity or reuse invariant violation found while preparing render state.
 /// It captures the conflicting values so invalid content can be rejected before
 /// `FolioView` is mutated.
