@@ -8,6 +8,62 @@ import UIKit
 @MainActor
 struct FolioPublicAPITests {
   @Test
+  func rowBuilderControlFlowIsAvailableToClients() {
+    let selectionRecorder = SelectionRecorder()
+    let makeRow = { (id: ClientRowID) in
+      ClientRow(
+        id: id,
+        title: String(describing: id),
+        height: 44,
+        selectionRecorder: selectionRecorder
+      )
+    }
+    let concreteRows = [makeRow(.helper(1)), makeRow(.helper(2))]
+    let erasedRows: [any Row<ClientRowID>] = [makeRow(.erased)]
+    let includeConditional = true
+    let chooseFirst = false
+    let section = Section<ClientSectionID, ClientRowID>(id: .settings) {
+      makeRow(.notifications)
+
+      if includeConditional {
+        makeRow(.conditional)
+      }
+
+      if chooseFirst {
+        makeRow(.firstChoice)
+      } else {
+        makeRow(.secondChoice)
+      }
+
+      concreteRows
+      erasedRows
+
+      for value in [1, 2] {
+        makeRow(.generated(value))
+      }
+
+      if #available(iOS 26, *) {
+        FutureClientRow(id: .available)
+      } else {
+        makeRow(.available)
+      }
+    }
+
+    #expect(
+      section.rows.map { $0.id } == [
+        .notifications,
+        .conditional,
+        .secondChoice,
+        .helper(1),
+        .helper(2),
+        .erased,
+        .generated(1),
+        .generated(2),
+        .available,
+      ])
+  }
+
+  @Test
   func completeFolioRendersThroughThePublicAPI() async throws {
     let selectionRecorder = SelectionRecorder()
     let headerRecorder = BoundaryRecorder()
@@ -69,12 +125,46 @@ struct FolioPublicAPITests {
   }
 }
 
+@Suite
+struct RowBuilderIsolationPublicAPITests {
+  @Test
+  func sectionCanBeBuiltFromANonisolatedContext() async {
+    _ = await Section<ClientSectionID, ClientRowID>(id: .settings) {
+      NonisolatedClientRow(id: .notifications)
+    }
+  }
+}
+
 private enum ClientSectionID: Hashable, Sendable {
   case settings
 }
 
 private enum ClientRowID: Hashable, Sendable {
   case notifications
+  case conditional
+  case firstChoice
+  case secondChoice
+  case helper(Int)
+  case erased
+  case generated(Int)
+  case available
+}
+
+private struct NonisolatedClientRow: Row, Sendable {
+  let id: ClientRowID
+  let cellReuseID = "NonisolatedClientCell"
+
+  @MainActor
+  func configure(_ cell: ClientCell) {}
+}
+
+@available(iOS 26, *)
+@MainActor
+private struct FutureClientRow: Row {
+  let id: ClientRowID
+  let cellReuseID = "FutureClientCell"
+
+  func configure(_ cell: ClientCell) {}
 }
 
 @MainActor

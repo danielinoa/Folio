@@ -23,4 +23,21 @@ where
     self.footer = footer
     self.rows = rows
   }
+
+  /// Creates a section from rows declared in source order.
+  /// `RowBuilder` flattens conditional and collection-generated rows before storage.
+  /// This makes mixed content concise while preserving row identity and rendering.
+  public init(
+    id: SectionID,
+    header: (any SectionHeader)? = nil,
+    footer: (any SectionFooter)? = nil,
+    @RowBuilder<RowID> rows: () -> [any Row<RowID>]
+  ) {
+    self.init(
+      id: id,
+      header: header,
+      footer: footer,
+      rows: rows()
+    )
+  }
 }
