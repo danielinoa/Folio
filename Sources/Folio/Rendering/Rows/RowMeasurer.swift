@@ -19,9 +19,11 @@ struct RowMeasurer {
     if let cachedCell = prototypesByReuseID[row.cellReuseID] {
       guard let typedCell = cachedCell as? R.CellType else {
         preconditionFailure(
-          "Sizing cell for reuse identifier '\(row.cellReuseID)' is "
-            + "\(String(reflecting: type(of: cachedCell))), but the row requires "
-            + "\(String(reflecting: R.CellType.self))."
+          """
+          Sizing cell for reuse identifier '\(row.cellReuseID)' is \
+          \(String(reflecting: type(of: cachedCell))), but the row requires \
+          \(String(reflecting: R.CellType.self)).
+          """
         )
       }
       cell = typedCell
@@ -40,8 +42,10 @@ struct RowMeasurer {
     let height = cell.heightThatFits(width: width)
     precondition(
       height.isFinite && height >= .zero,
-      "\(String(reflecting: R.CellType.self)) returned invalid row height \(height) "
-        + "for width \(width)."
+      """
+      \(String(reflecting: R.CellType.self)) returned invalid row height \(height) \
+      for width \(width).
+      """
     )
 
     // Whole-point rounding keeps Folio's policy simple while ensuring measured

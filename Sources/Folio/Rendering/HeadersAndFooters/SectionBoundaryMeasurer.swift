@@ -19,10 +19,12 @@ struct SectionBoundaryMeasurer {
     if let cachedView = prototypesByReuseID[boundary.viewReuseID] {
       guard let typedView = cachedView as? S.ViewType else {
         preconditionFailure(
-          "Sizing section-boundary view for reuse identifier "
-            + "'\(boundary.viewReuseID)' is "
-            + "\(String(reflecting: type(of: cachedView))), but the descriptor "
-            + "requires \(String(reflecting: S.ViewType.self))."
+          """
+          Sizing section-boundary view for reuse identifier \
+          '\(boundary.viewReuseID)' is \
+          \(String(reflecting: type(of: cachedView))), but the descriptor \
+          requires \(String(reflecting: S.ViewType.self)).
+          """
         )
       }
       view = typedView
@@ -40,8 +42,10 @@ struct SectionBoundaryMeasurer {
     let height = view.heightThatFits(width: width)
     precondition(
       height.isFinite && height >= .zero,
-      "\(String(reflecting: S.ViewType.self)) returned invalid header/footer "
-        + "height \(height) for width \(width)."
+      """
+      \(String(reflecting: S.ViewType.self)) returned invalid header/footer \
+      height \(height) for width \(width).
+      """
     )
 
     return height == .zero ? .leastNormalMagnitude : ceil(height)

@@ -222,9 +222,11 @@ where
     )
     guard let typedCell = cell as? R.CellType else {
       preconditionFailure(
-        "Dequeued \(String(reflecting: type(of: cell))) for reuse identifier "
-          + "'\(row.cellReuseID)', but the row requires "
-          + "\(String(reflecting: R.CellType.self))."
+        """
+        Dequeued \(String(reflecting: type(of: cell))) for reuse identifier \
+        '\(row.cellReuseID)', but the row requires \
+        \(String(reflecting: R.CellType.self)).
+        """
       )
     }
     row.configure(typedCell)

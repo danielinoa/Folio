@@ -42,49 +42,61 @@ where
       "Duplicate section identity \(String(reflecting: sectionID))."
 
     case .duplicateRowID(let rowID):
-      "Duplicate row identity \(String(reflecting: rowID)). "
-        + "Row identities must be globally unique in an applied snapshot."
+      """
+        Duplicate row identity \(String(reflecting: rowID)). \
+        Row identities must be globally unique in an applied snapshot.
+        """
 
     case .changedRowRenderingIdentity(let rowID, let original, let proposed):
-      "Row identity \(String(reflecting: rowID)) changed its rendering identity from "
-        + "\(original.cellTypeName) / '\(original.cellReuseID)' to "
-        + "\(proposed.cellTypeName) / '\(proposed.cellReuseID)'."
+      """
+        Row identity \(String(reflecting: rowID)) changed its rendering identity from \
+        \(original.cellTypeName) / '\(original.cellReuseID)' to \
+        \(proposed.cellTypeName) / '\(proposed.cellReuseID)'.
+        """
 
     case .changedHeaderRenderingIdentity(
       let sectionID,
       let original,
       let proposed
     ):
-      "Section identity \(String(reflecting: sectionID)) changed its header "
-        + "rendering identity from "
-        + "\(original.viewTypeName) / '\(original.viewReuseID)' to "
-        + "\(proposed.viewTypeName) / '\(proposed.viewReuseID)'."
+      """
+        Section identity \(String(reflecting: sectionID)) changed its header \
+        rendering identity from \
+        \(original.viewTypeName) / '\(original.viewReuseID)' to \
+        \(proposed.viewTypeName) / '\(proposed.viewReuseID)'.
+        """
 
     case .changedFooterRenderingIdentity(
       let sectionID,
       let original,
       let proposed
     ):
-      "Section identity \(String(reflecting: sectionID)) changed its footer "
-        + "rendering identity from "
-        + "\(original.viewTypeName) / '\(original.viewReuseID)' to "
-        + "\(proposed.viewTypeName) / '\(proposed.viewReuseID)'."
+      """
+        Section identity \(String(reflecting: sectionID)) changed its footer \
+        rendering identity from \
+        \(original.viewTypeName) / '\(original.viewReuseID)' to \
+        \(proposed.viewTypeName) / '\(proposed.viewReuseID)'.
+        """
 
     case .conflictingCellRegistration(
       let reuseID,
       let registeredCellTypeName,
       let proposedCellTypeName
     ):
-      "Reuse identifier '\(reuseID)' is already registered to "
-        + "\(registeredCellTypeName), not \(proposedCellTypeName)."
+      """
+        Reuse identifier '\(reuseID)' is already registered to \
+        \(registeredCellTypeName), not \(proposedCellTypeName).
+        """
 
     case .conflictingBoundaryViewType(
       let reuseID,
       let existingViewTypeName,
       let proposedViewTypeName
     ):
-      "Header/footer reuse identifier '\(reuseID)' already maps to "
-        + "\(existingViewTypeName), not \(proposedViewTypeName)."
+      """
+        Header/footer reuse identifier '\(reuseID)' already maps to \
+        \(existingViewTypeName), not \(proposedViewTypeName).
+        """
     }
   }
 }
