@@ -31,7 +31,7 @@ where
     id: SectionID,
     header: (any SectionHeader)? = nil,
     footer: (any SectionFooter)? = nil,
-    @RowBuilder<RowID> rows: () -> [any Row<RowID>]
+    @RowBuilder<RowID> rows: @MainActor () -> [any Row<RowID>]
   ) {
     self.init(
       id: id,

@@ -8,6 +8,56 @@ import UIKit
 @MainActor
 struct FolioPublicAPITests {
   @Test
+  func sectionBuilderControlFlowIsAvailableToClients() {
+    let makeSection = { (id: ClientSectionID) in
+      Section<ClientSectionID, ClientRowID>(id: id, rows: [])
+    }
+    let helperSections = [
+      makeSection(.helper(1)),
+      makeSection(.helper(2)),
+    ]
+    let includeConditional = true
+    let chooseFirst = false
+    let content = Folio<ClientSectionID, ClientRowID> {
+      makeSection(.settings)
+
+      if includeConditional {
+        makeSection(.conditional)
+      }
+
+      if chooseFirst {
+        makeSection(.firstChoice)
+      } else {
+        makeSection(.secondChoice)
+      }
+
+      helperSections
+
+      for value in [1, 2] {
+        makeSection(.generated(value))
+      }
+
+      if #available(iOS 26, *) {
+        futureClientSection()
+      } else {
+        makeSection(.available)
+      }
+    }
+
+    #expect(
+      content.sections.map { $0.id } == [
+        .settings,
+        .conditional,
+        .secondChoice,
+        .helper(1),
+        .helper(2),
+        .generated(1),
+        .generated(2),
+        .available,
+      ])
+  }
+
+  @Test
   func rowBuilderControlFlowIsAvailableToClients() {
     let selectionRecorder = SelectionRecorder()
     let makeRow = { (id: ClientRowID) in
@@ -130,13 +180,31 @@ struct RowBuilderIsolationPublicAPITests {
   @Test
   func sectionCanBeBuiltFromANonisolatedContext() async {
     _ = await Section<ClientSectionID, ClientRowID>(id: .settings) {
-      NonisolatedClientRow(id: .notifications)
+      IsolatedClientRow(id: .notifications)
+    }
+  }
+}
+
+@Suite
+struct SectionBuilderIsolationPublicAPITests {
+  @Test
+  func nestedBuildersCanBeUsedFromANonisolatedContext() async {
+    _ = await Folio {
+      Section(id: ClientSectionID.settings) {
+        IsolatedClientRow(id: ClientRowID.notifications)
+      }
     }
   }
 }
 
 private enum ClientSectionID: Hashable, Sendable {
   case settings
+  case conditional
+  case firstChoice
+  case secondChoice
+  case helper(Int)
+  case generated(Int)
+  case available
 }
 
 private enum ClientRowID: Hashable, Sendable {
@@ -150,11 +218,15 @@ private enum ClientRowID: Hashable, Sendable {
   case available
 }
 
-private struct NonisolatedClientRow: Row, Sendable {
+@MainActor
+private struct IsolatedClientRow: Row {
   let id: ClientRowID
-  let cellReuseID = "NonisolatedClientCell"
+  let cellReuseID = "IsolatedClientCell"
 
-  @MainActor
+  init(id: ClientRowID) {
+    self.id = id
+  }
+
   func configure(_ cell: ClientCell) {}
 }
 
@@ -165,6 +237,12 @@ private struct FutureClientRow: Row {
   let cellReuseID = "FutureClientCell"
 
   func configure(_ cell: ClientCell) {}
+}
+
+@available(iOS 26, *)
+@MainActor
+private func futureClientSection() -> Section<ClientSectionID, ClientRowID> {
+  Section(id: .available, rows: [])
 }
 
 @MainActor

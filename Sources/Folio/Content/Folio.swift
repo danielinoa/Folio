@@ -12,4 +12,13 @@ where
   public init(sections: [Section<SectionID, RowID>] = []) {
     self.sections = sections
   }
+
+  /// Creates a snapshot from sections declared in source order.
+  /// `SectionBuilder` flattens conditional and collection-generated sections.
+  /// This keeps dynamic table structure concise while preserving reconciliation.
+  public init(
+    @SectionBuilder<SectionID, RowID> sections: @MainActor () -> [Section<SectionID, RowID>]
+  ) {
+    self.init(sections: sections())
+  }
 }
