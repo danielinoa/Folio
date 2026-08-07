@@ -12,6 +12,7 @@ enum TestSectionID: Hashable, Sendable {
 enum TestRowID: Hashable, Sendable {
   case first
   case second
+  case generated(Int)
 }
 
 @MainActor
