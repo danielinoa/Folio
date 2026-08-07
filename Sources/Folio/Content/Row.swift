@@ -22,9 +22,11 @@ public protocol Row<ID> {
   /// Applies the current presentation and actions to `cell`.
   ///
   /// `FolioView` calls this method before returning a display cell and before
-  /// measuring an offscreen sizing cell. A retained row is reconfigured after each
-  /// apply, so this method may run repeatedly on the same visible cell. This lets
-  /// Folio remeasure changed content without deleting and recreating the row.
+  /// measuring an offscreen sizing cell. By default, a retained row is reconfigured
+  /// after each apply, so this method may run repeatedly on the same visible cell.
+  /// A `.only(_:)` or `.none` policy can omit explicit reconfiguration for a
+  /// retained cell while Folio still replaces its descriptor for future display,
+  /// measurement, and selection.
   ///
   /// Implementations must completely replace prior presentation state and remain
   /// idempotent. They should not mutate application state or perform lifecycle

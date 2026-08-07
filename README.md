@@ -20,7 +20,16 @@ import Folio
 import UIKit
 
 enum SectionID: Hashable, Sendable { case main }
-enum RowID: Hashable, Sendable { case welcome }
+enum RowID: Hashable, Sendable {
+  case notifications
+  case details
+  case channel(UUID)
+}
+
+struct Channel {
+  let id: UUID
+  let name: String
+}
 
 @MainActor
 final class MessageCell: UITableViewCell, SizingCell {
@@ -39,30 +48,72 @@ struct MessageRow: Row {
 }
 
 @MainActor
-func makeTableView() -> FolioView<SectionID, RowID> {
-  let tableView = FolioView<SectionID, RowID>(style: .plain)
-  let folio = Folio<SectionID, RowID>(
-    sections: [
-      Section(
-        id: .main,
-        rows: [MessageRow(id: .welcome, title: "Welcome to Folio")]
+func makeFolio(
+  notificationsEnabled: Bool,
+  channels: [Channel]
+) -> Folio<SectionID, RowID> {
+  Folio {
+    Section(id: .main) {
+      MessageRow(
+        id: .notifications,
+        title: "Notifications: \(notificationsEnabled ? "On" : "Off")"
       )
-    ]
-  )
 
-  tableView.apply(folio, animatingDifferences: false)
-  return tableView
+      if notificationsEnabled {
+        MessageRow(id: .details, title: "Choose which channels can notify you")
+
+        for channel in channels {
+          MessageRow(id: .channel(channel.id), title: channel.name)
+        }
+      }
+    }
+  }
 }
+
+let tableView = FolioView<SectionID, RowID>(style: .plain)
+var notificationsEnabled = false
+let channels = [Channel(id: UUID(), name: "Product updates")]
+
+tableView.apply(
+  makeFolio(notificationsEnabled: notificationsEnabled, channels: channels),
+  animatingDifferences: false
+)
+
+notificationsEnabled = true
+tableView.apply(
+  makeFolio(notificationsEnabled: notificationsEnabled, channels: channels),
+  rowReconfiguration: .only([.notifications])
+)
 ```
 
-When state changes, build and apply a new `Folio`. Use a nonanimated first apply;
-later applies animate by default.
+State changes render by rebuilding and applying the complete `Folio`. Use a
+nonanimated first apply; later applies animate by default.
+
+By default, every retained row is reconfigured. To preserve transient state when
+UIKit retains an unchanged visible cell, pass only the retained row IDs whose
+configuration changed; newly displayed rows still configure normally. Use `.none`
+when only structural differences need to be applied.
+
+Use the direct array initializer when imperative construction is a better fit:
+
+```swift
+let folio = Folio<SectionID, RowID>(
+  sections: [
+    Section(
+      id: .main,
+      rows: [MessageRow(id: .notifications, title: "Notifications")]
+    )
+  ]
+)
+```
 
 ## Rules
 
 - Section IDs must be unique, and row IDs must be globally unique.
 - A stable row ID must keep the same cell type and reuse identifier for the
   `FolioView`'s lifetime.
+- When using `.only(...)`, include every retained row whose presentation, measured
+  height, or cell-installed actions changed.
 - `configure(_:)` may run repeatedly for display and sizing. It must completely and
   idempotently update the view without application-state side effects.
 - `heightThatFits(width:)` must return the complete, finite, nonnegative height.

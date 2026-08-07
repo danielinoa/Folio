@@ -95,17 +95,58 @@ where
     animatingDifferences: Bool = true,
     completion: (() -> Void)? = nil
   ) {
+    reconcile(
+      content,
+      rowReconfiguration: .all,
+      animatingDifferences: animatingDifferences,
+      completion: completion
+    )
+  }
+
+  /// Reconciles the table using an explicit retained-row reconfiguration policy.
+  ///
+  /// Structural insertions, removals, and moves still apply to the complete
+  /// snapshot, and newly displayed rows configure normally. `.all` explicitly
+  /// refreshes every retained row, `.only(_:)` refreshes the supplied IDs, and
+  /// `.none` requests no retained-row reconfiguration. Include a row in
+  /// `.only(_:)` whenever the result of `configure(_:)` changes, including
+  /// presentation, measured height, or actions installed directly into the cell.
+  /// Folio always routes `didSelect()` through the latest descriptor, even when
+  /// a cell is not explicitly reconfigured.
+  public func apply(
+    _ content: Folio<SectionID, RowID>,
+    rowReconfiguration: RowReconfiguration<RowID>,
+    animatingDifferences: Bool = true,
+    completion: (() -> Void)? = nil
+  ) {
+    reconcile(
+      content,
+      rowReconfiguration: rowReconfiguration,
+      animatingDifferences: animatingDifferences,
+      completion: completion
+    )
+  }
+
+  private func reconcile(
+    _ content: Folio<SectionID, RowID>,
+    rowReconfiguration: RowReconfiguration<RowID>,
+    animatingDifferences: Bool,
+    completion: (() -> Void)?
+  ) {
     let prepared = prepare(content)
     var nextSnapshot = prepared.snapshot
     let previousRowIDs = Set(snapshotDataSource.snapshot().itemIdentifiers)
-    let retainedRowIDs = nextSnapshot.itemIdentifiers.filter(previousRowIDs.contains)
+    let retainedRowIDs = nextSnapshot.itemIdentifiers.filter { rowID in
+      previousRowIDs.contains(rowID)
+        && rowReconfiguration.reconfigures(rowID)
+    }
     let shouldReconcileHeadersAndFooters =
       !currentHeaders.isEmpty || !activeHeaders.isEmpty
       || !prepared.headersBySectionID.isEmpty || !currentFooters.isEmpty
       || !activeFooters.isEmpty || !prepared.footersBySectionID.isEmpty
 
     if !retainedRowIDs.isEmpty {
-      // Preserve row identity and visible cells while refreshing their values and heights.
+      // Refresh requested rows in place so their values and measured heights can change.
       nextSnapshot.reconfigureItems(retainedRowIDs)
     }
 

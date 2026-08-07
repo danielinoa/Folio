@@ -175,6 +175,57 @@ struct FolioPublicAPITests {
     }
     #expect(selectionRecorder.count == 1)
   }
+
+  @Test
+  func selectiveReconfigurationIsAvailableThroughThePublicAPI() async throws {
+    let selectionRecorder = SelectionRecorder()
+    let host = ClientFolioViewHost()
+    let folioView = host.folioView
+    defer { host.tearDown() }
+    let initialContent = Folio<ClientSectionID, ClientRowID> {
+      Section(id: .settings) {
+        ClientRow(
+          id: .notifications,
+          title: "Initial",
+          height: 44,
+          selectionRecorder: selectionRecorder
+        )
+      }
+    }
+
+    await apply(initialContent, to: folioView)
+    folioView.layoutIfNeeded()
+    let initialCell = try #require(
+      folioView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ClientCell
+    )
+
+    let updatedContent = Folio<ClientSectionID, ClientRowID> {
+      Section(id: .settings) {
+        ClientRow(
+          id: .notifications,
+          title: "Updated",
+          height: 88,
+          selectionRecorder: selectionRecorder
+        )
+      }
+    }
+    await withCheckedContinuation { continuation in
+      folioView.apply(
+        updatedContent,
+        rowReconfiguration: .only([.notifications]),
+        animatingDifferences: false,
+        completion: { continuation.resume() }
+      )
+    }
+    folioView.layoutIfNeeded()
+
+    let updatedCell = try #require(
+      folioView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ClientCell
+    )
+    #expect(updatedCell === initialCell)
+    #expect(updatedCell.title == "Updated")
+    #expect(folioView.rectForRow(at: IndexPath(row: 0, section: 0)).height == 88)
+  }
 }
 
 @Suite
