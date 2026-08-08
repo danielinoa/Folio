@@ -70,7 +70,9 @@ cells back to their expected types.
 
 One way to keep a conventional implementation organized is to assemble an enum of
 visible rows. Every data-source or delegate callback that needs row meaning must
-then translate its `IndexPath` through that model:
+then translate its `IndexPath` through that model. This example uses the
+`NotificationsCell` and `MessageCell` classes defined in
+[Sample Usage](#sample-usage):
 
 ```swift
 private enum TableRow {
@@ -380,7 +382,10 @@ final class NotificationSettingsViewController: UIViewController {
           )
 
           for channel in channels {
-            MessageRow(id: .channel(channel.id), text: channel.name)
+            MessageRow(
+              id: .channel(channel.id),
+              text: channel.name
+            )
           }
         }
       }
@@ -401,7 +406,7 @@ final class NotificationSettingsViewController: UIViewController {
 ```
 
 Selecting the notifications row updates controller-owned state and calls `render()`.
-The retained notification row is reconfigured while Folio independently inserts or
+The retained notifications row is reconfigured while Folio independently inserts or
 removes the conditional message rows.
 
 ## Building Content
@@ -485,9 +490,10 @@ Every row's cell conforms to `SizingCell` and reports its complete height throug
 it at the table's current width, allowing content changes and width changes to
 produce new heights without requiring Auto Layout.
 
-Folio currently proposes the table's full bounds width. Use `.plain` when row
-height depends on that width; inset-grouped rows display at a narrower width and
-need a future row-width resolution API for accurate manual measurement.
+Folio currently proposes the table's full bounds width to rows, headers, and
+footers. Use `.plain` or `.grouped` when a measured height depends on that
+width; inset-grouped content displays at a narrower width and needs a future
+width-resolution API for accurate manual measurement.
 
 The returned height must include all cell-owned margins, padding, and accessories.
 Because `configure(_:)` runs for both display and sizing, it may be called repeatedly
@@ -498,8 +504,8 @@ should invalidate that layout when configuration changes.
 ## Headers and Footers
 
 Sections accept optional typed `SectionHeader` and `SectionFooter` descriptors.
-Their view types conform to `SizingSectionView` and follow the same configure,
-then measure model as rows:
+Their view types conform to `SizingSectionView` and follow the same
+configure-then-measure model as rows:
 
 ```swift
 @MainActor
