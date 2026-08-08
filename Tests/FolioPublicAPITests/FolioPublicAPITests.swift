@@ -20,7 +20,7 @@ struct FolioPublicAPITests {
     ]
     let includeConditional = true
     let chooseFirst = false
-    let content = Folio<ClientSectionID, ClientRowID> {
+    let content = Content<ClientSectionID, ClientRowID> {
       makeSection(.settings)
 
       if includeConditional {
@@ -116,7 +116,7 @@ struct FolioPublicAPITests {
   }
 
   @Test
-  func completeFolioRendersThroughThePublicAPI() async throws {
+  func completeContentRendersThroughThePublicAPI() async throws {
     let selectionRecorder = SelectionRecorder()
     let headerRecorder = BoundaryRecorder()
     let footerRecorder = BoundaryRecorder()
@@ -126,7 +126,7 @@ struct FolioPublicAPITests {
       height: 64,
       selectionRecorder: selectionRecorder
     )
-    let content: Folio<ClientSectionID, ClientRowID> = Folio(
+    let content: Content<ClientSectionID, ClientRowID> = Content(
       sections: [
         Section(
           id: .settings,
@@ -182,7 +182,7 @@ struct FolioPublicAPITests {
     let host = ClientFolioViewHost()
     let folioView = host.folioView
     defer { host.tearDown() }
-    let initialContent = Folio<ClientSectionID, ClientRowID> {
+    let initialContent = Content<ClientSectionID, ClientRowID> {
       Section(id: .settings) {
         ClientRow(
           id: .notifications,
@@ -199,7 +199,7 @@ struct FolioPublicAPITests {
       folioView.cellForRow(at: IndexPath(row: 0, section: 0)) as? ClientCell
     )
 
-    let updatedContent = Folio<ClientSectionID, ClientRowID> {
+    let updatedContent = Content<ClientSectionID, ClientRowID> {
       Section(id: .settings) {
         ClientRow(
           id: .notifications,
@@ -242,7 +242,7 @@ struct RowBuilderIsolationPublicAPITests {
 struct SectionBuilderIsolationPublicAPITests {
   @Test
   func nestedBuildersCanBeUsedFromANonisolatedContext() async {
-    _ = await Folio {
+    _ = await Content {
       Section(id: ClientSectionID.settings) {
         IsolatedClientRow(id: ClientRowID.notifications)
       }
@@ -406,7 +406,7 @@ private final class ClientBoundaryView: UIView, SizingSectionView {
 
 @MainActor
 private func apply(
-  _ content: Folio<ClientSectionID, ClientRowID>,
+  _ content: Content<ClientSectionID, ClientRowID>,
   to folioView: FolioView<ClientSectionID, ClientRowID>
 ) async {
   await withCheckedContinuation { continuation in

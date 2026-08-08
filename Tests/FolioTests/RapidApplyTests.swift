@@ -20,7 +20,7 @@ extension FolioViewTests {
     defer { host.tearDown() }
 
     await apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .primary,
@@ -37,7 +37,7 @@ extension FolioViewTests {
     )
 
     folioView.apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .primary,
@@ -66,7 +66,7 @@ extension FolioViewTests {
       onSelect: { selectionRecorder.values.append("C") }
     )
     await apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .secondary,
@@ -110,7 +110,7 @@ extension FolioViewTests {
     defer { host.tearDown() }
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "A header",
@@ -148,7 +148,7 @@ extension FolioViewTests {
     #expect(initialFooterContainer.hostedView != nil)
 
     folioView.apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         rows: [
           RecordingRow(
@@ -171,7 +171,7 @@ extension FolioViewTests {
     var newestCompletionCount = 0
     await withCheckedContinuation { continuation in
       folioView.apply(
-        makeSingleSectionFolio(
+        makeSingleSectionContent(
           sectionID: .primary,
           rows: [
             RecordingRow(

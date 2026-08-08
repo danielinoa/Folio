@@ -31,7 +31,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .primary,
@@ -64,7 +64,7 @@ extension FolioViewTests {
     #expect(recordingFooter(in: folioView, section: 1)?.value == "Secondary 1 footer")
 
     await apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .tertiary,
@@ -104,7 +104,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      Folio(
+      Content(
         sections: [
           makeBoundarySection(
             id: .primary,
@@ -154,7 +154,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "Initial header",
@@ -195,7 +195,7 @@ extension FolioViewTests {
     #expect(folioView.rectForFooter(inSection: 0).height == 24)
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "Updated header",
@@ -264,7 +264,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "Initial header",
@@ -298,7 +298,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         footer: RecordingBoundary(
           value: "Updated footer",
@@ -353,7 +353,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(sectionID: .primary, rows: [row]),
+      makeSingleSectionContent(sectionID: .primary, rows: [row]),
       to: folioView,
       animated: false
     )
@@ -375,7 +375,7 @@ extension FolioViewTests {
     #expect(initialFooterContainer.hostedView == nil)
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "Shown header",
@@ -420,7 +420,7 @@ extension FolioViewTests {
     #expect(folioView.rectForFooter(inSection: 0).height == 28)
 
     await apply(
-      makeSingleSectionFolio(sectionID: .primary, rows: [row]),
+      makeSingleSectionContent(sectionID: .primary, rows: [row]),
       to: folioView,
       animated: true
     )
@@ -465,7 +465,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(sectionID: .primary, rows: [row]),
+      makeSingleSectionContent(sectionID: .primary, rows: [row]),
       to: folioView,
       animated: false
     )
@@ -477,7 +477,7 @@ extension FolioViewTests {
     #expect(folioView.rectForFooter(inSection: 0).height < 1)
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: RecordingBoundary(
           value: "Grouped header",
@@ -505,7 +505,7 @@ extension FolioViewTests {
     #expect(folioView.rectForFooter(inSection: 0).height == 34)
 
     await apply(
-      makeSingleSectionFolio(sectionID: .primary, rows: [row]),
+      makeSingleSectionContent(sectionID: .primary, rows: [row]),
       to: folioView,
       animated: true
     )
@@ -535,7 +535,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeSingleSectionFolio(
+      makeSingleSectionContent(
         sectionID: .primary,
         header: WidthScaledBoundary(
           value: "Header",

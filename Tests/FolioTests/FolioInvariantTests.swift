@@ -8,7 +8,7 @@ import UIKit
 @Test
 @MainActor
 func validatorRejectsDuplicateSectionIDs() {
-  let content = Folio<TestSectionID, TestRowID>(
+  let content = Content<TestSectionID, TestRowID>(
     sections: [
       Section(id: .primary, rows: []),
       Section(id: .primary, rows: []),
@@ -29,7 +29,7 @@ func validatorRejectsDuplicateSectionIDs() {
 func validatorRejectsDuplicateRowIDsWithinASection() {
   let recorder = SizingRecorder()
   let row = RecordingRow(id: .first, scale: 0.2, value: "First", recorder: recorder)
-  let content = makeFolio([(.primary, [row, row])])
+  let content = makeContent([(.primary, [row, row])])
 
   let result = SnapshotValidator<TestSectionID, TestRowID>().prepare(content)
 
@@ -51,7 +51,7 @@ func validatorRejectsDuplicateRowIDsAcrossSections() {
     value: "Duplicate",
     recorder: recorder
   )
-  let content = makeFolio([
+  let content = makeContent([
     (.primary, [first]),
     (.secondary, [duplicate]),
   ])
@@ -69,7 +69,7 @@ func validatorRejectsDuplicateRowIDsAcrossSections() {
 @MainActor
 func validatorRejectsOneReuseIDForDifferentCellClasses() {
   let recorder = SizingRecorder()
-  let content = makeFolio([
+  let content = makeContent([
     (
       .primary,
       [
@@ -108,7 +108,7 @@ func validatorRejectsOneReuseIDForDifferentCellClasses() {
 @MainActor
 func validatorRejectsARegisteredReuseIDForADifferentCellClass() throws {
   let recorder = SizingRecorder()
-  let initialContent = makeFolio([
+  let initialContent = makeContent([
     (
       .primary,
       [
@@ -129,7 +129,7 @@ func validatorRejectsARegisteredReuseIDForADifferentCellClass() throws {
     existingCellRegistrations: initial.cellRegistrations,
     existingRowRenderingIdentities: initial.rowRenderingIdentities
   )
-  let laterContent = makeFolio([
+  let laterContent = makeContent([
     (
       .secondary,
       [
@@ -156,7 +156,7 @@ func validatorRejectsARegisteredReuseIDForADifferentCellClass() throws {
 @MainActor
 func validatorRejectsAChangedRowRenderingIdentityForAnExistingRowID() throws {
   let recorder = SizingRecorder()
-  let initialContent = makeFolio([
+  let initialContent = makeContent([
     (
       .primary,
       [
@@ -167,7 +167,7 @@ func validatorRejectsAChangedRowRenderingIdentityForAnExistingRowID() throws {
   let initial = try SnapshotValidator<TestSectionID, TestRowID>()
     .prepare(initialContent)
     .get()
-  let changedContent = makeFolio([
+  let changedContent = makeContent([
     (
       .primary,
       [
@@ -206,7 +206,7 @@ func validatorRejectsAChangedRowRenderingIdentityForAnExistingRowID() throws {
 @MainActor
 func validatorSupportsHeterogeneousRowsWithDistinctCellTypes() throws {
   let recorder = SizingRecorder()
-  let content = makeFolio([
+  let content = makeContent([
     (
       .primary,
       [
@@ -236,7 +236,7 @@ func validatorSupportsHeterogeneousRowsWithDistinctCellTypes() throws {
 @MainActor
 func validatorStoresHeaderAndFooterStateSeparately() throws {
   let recorder = BoundaryRecorder()
-  let content = makeSingleSectionFolio(
+  let content = makeSingleSectionContent(
     sectionID: .primary,
     header: RecordingBoundary(
       value: "Header",
@@ -279,7 +279,7 @@ func validatorStoresHeaderAndFooterStateSeparately() throws {
 @MainActor
 func validatorRejectsChangedHeaderRenderingIdentity() throws {
   let recorder = BoundaryRecorder()
-  let initialContent = makeSingleSectionFolio(
+  let initialContent = makeSingleSectionContent(
     sectionID: .primary,
     header: RecordingBoundary(
       value: "Initial",
@@ -292,7 +292,7 @@ func validatorRejectsChangedHeaderRenderingIdentity() throws {
   let initial = try SnapshotValidator<TestSectionID, TestRowID>()
     .prepare(initialContent)
     .get()
-  let changedContent = makeSingleSectionFolio(
+  let changedContent = makeSingleSectionContent(
     sectionID: .primary,
     header: AlternateHeader(viewReuseID: "ChangedHeader"),
     rows: []
@@ -326,7 +326,7 @@ func validatorRejectsChangedHeaderRenderingIdentity() throws {
 @MainActor
 func validatorRejectsChangedFooterRenderingIdentity() throws {
   let recorder = BoundaryRecorder()
-  let initialContent = makeSingleSectionFolio(
+  let initialContent = makeSingleSectionContent(
     sectionID: .primary,
     footer: RecordingBoundary(
       value: "Initial",
@@ -339,7 +339,7 @@ func validatorRejectsChangedFooterRenderingIdentity() throws {
   let initial = try SnapshotValidator<TestSectionID, TestRowID>()
     .prepare(initialContent)
     .get()
-  let changedContent = makeSingleSectionFolio(
+  let changedContent = makeSingleSectionContent(
     sectionID: .primary,
     footer: AlternateFooter(viewReuseID: "ChangedFooter"),
     rows: []
@@ -373,7 +373,7 @@ func validatorRejectsChangedFooterRenderingIdentity() throws {
 @MainActor
 func validatorRejectsHeaderAndFooterReuseIDForDifferentViewClasses() {
   let recorder = BoundaryRecorder()
-  let content = Folio<TestSectionID, TestRowID>(
+  let content = Content<TestSectionID, TestRowID>(
     sections: [
       Section(
         id: .primary,

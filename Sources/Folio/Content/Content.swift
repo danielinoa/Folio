@@ -4,7 +4,7 @@
 /// Rebuild it after state changes so `FolioView` can reconcile successive values
 /// by stable identities; section IDs must be unique and row IDs globally unique.
 @MainActor
-public struct Folio<SectionID, RowID>
+public struct Content<SectionID, RowID>
 where
   SectionID: Hashable & Sendable,
   RowID: Hashable & Sendable

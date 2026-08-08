@@ -2,7 +2,7 @@
 
 import UIKit
 
-/// Converts a `Folio` into validated row, header, and footer render state.
+/// Converts `Content` into validated row, header, and footer render state.
 /// It builds each role in temporary maps while checking identity and reuse invariants.
 /// This rejects invalid content before any partial view mutation can occur.
 @MainActor
@@ -34,7 +34,7 @@ where
   }
 
   func prepare(
-    _ content: Folio<SectionID, RowID>
+    _ content: Content<SectionID, RowID>
   ) -> Result<
     PreparedContent<SectionID, RowID>,
     SnapshotValidationError<SectionID, RowID>

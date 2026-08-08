@@ -2,7 +2,7 @@
 
 import UIKit
 
-/// A table view that manually measures row heights and reconciles `Folio` snapshots.
+/// A table view that manually measures row heights and reconciles `Content` snapshots.
 ///
 /// It validates stable identities, applies structural changes through a diffable
 /// data source, and opens row and section-boundary existentials for typed view
@@ -91,7 +91,7 @@ where
   /// applies are supported; only the newest completion prunes descriptors
   /// retained for an in-flight transition.
   public func apply(
-    _ content: Folio<SectionID, RowID>,
+    _ content: Content<SectionID, RowID>,
     animatingDifferences: Bool = true,
     completion: (() -> Void)? = nil
   ) {
@@ -114,7 +114,7 @@ where
   /// Folio always routes `didSelect()` through the latest descriptor, even when
   /// a cell is not explicitly reconfigured.
   public func apply(
-    _ content: Folio<SectionID, RowID>,
+    _ content: Content<SectionID, RowID>,
     rowReconfiguration: RowReconfiguration<RowID>,
     animatingDifferences: Bool = true,
     completion: (() -> Void)? = nil
@@ -128,7 +128,7 @@ where
   }
 
   private func reconcile(
-    _ content: Folio<SectionID, RowID>,
+    _ content: Content<SectionID, RowID>,
     rowReconfiguration: RowReconfiguration<RowID>,
     animatingDifferences: Bool,
     completion: (() -> Void)?
@@ -204,7 +204,7 @@ where
   // MARK: - Content Preparation
 
   private func prepare(
-    _ content: Folio<SectionID, RowID>
+    _ content: Content<SectionID, RowID>
   ) -> PreparedContent<SectionID, RowID> {
     let validator = SnapshotValidator<SectionID, RowID>(
       existingCellRegistrations: cellRegistrations,

@@ -18,7 +18,7 @@ extension FolioViewTests {
     defer { host.tearDown() }
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -52,7 +52,7 @@ extension FolioViewTests {
     secondCell.value = "Transient second"
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -102,7 +102,7 @@ extension FolioViewTests {
     defer { host.tearDown() }
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -125,7 +125,7 @@ extension FolioViewTests {
     textField.selectedTextRange = selection
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -162,7 +162,7 @@ extension FolioViewTests {
     let folioView = FolioView<TestSectionID, TestRowID>(style: .plain)
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -181,7 +181,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -248,7 +248,7 @@ private final class EditingCell: UITableViewCell, SizingCell {
 
 @MainActor
 private func apply(
-  _ content: Folio<TestSectionID, TestRowID>,
+  _ content: Content<TestSectionID, TestRowID>,
   to folioView: FolioView<TestSectionID, TestRowID>,
   rowReconfiguration: RowReconfiguration<TestRowID>,
   animated: Bool

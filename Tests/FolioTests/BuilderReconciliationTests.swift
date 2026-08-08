@@ -152,7 +152,7 @@ extension FolioViewTests {
   @MainActor
   func builderSnapshotsPreserveDuplicateIdentityValidation() {
     let recorder = SizingRecorder()
-    let duplicateSections = Folio<TestSectionID, TestRowID> {
+    let duplicateSections = Content<TestSectionID, TestRowID> {
       Section(id: .primary, rows: [])
       Section(id: .primary, rows: [])
     }
@@ -165,7 +165,7 @@ extension FolioViewTests {
     }
     #expect(sectionID == .primary)
 
-    let duplicateRows = Folio<TestSectionID, TestRowID> {
+    let duplicateRows = Content<TestSectionID, TestRowID> {
       Section(id: .primary) {
         RecordingRow(id: .first, scale: 0.1, value: "First", recorder: recorder)
       }
@@ -187,7 +187,7 @@ extension FolioViewTests {
   @MainActor
   func builderSnapshotsPreserveRenderingIdentityValidation() throws {
     let recorder = SizingRecorder()
-    let initialContent = Folio<TestSectionID, TestRowID> {
+    let initialContent = Content<TestSectionID, TestRowID> {
       Section(id: .primary) {
         RecordingRow(
           id: .first,
@@ -201,7 +201,7 @@ extension FolioViewTests {
     let initial = try SnapshotValidator<TestSectionID, TestRowID>()
       .prepare(initialContent)
       .get()
-    let changedContent = Folio<TestSectionID, TestRowID> {
+    let changedContent = Content<TestSectionID, TestRowID> {
       Section(id: .primary) {
         AlternateRow(
           id: .first,
@@ -246,8 +246,8 @@ private func makeBuilderContent(
   rowRecorder: SizingRecorder,
   boundaryRecorder: BoundaryRecorder,
   onMasterSelection: @escaping () -> Void = {}
-) -> Folio<TestSectionID, TestRowID> {
-  Folio {
+) -> Content<TestSectionID, TestRowID> {
+  Content {
     Section(
       id: .primary,
       header: RecordingBoundary(

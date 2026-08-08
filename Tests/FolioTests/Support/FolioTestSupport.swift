@@ -18,10 +18,10 @@ enum TestRowID: Hashable, Sendable {
 }
 
 @MainActor
-func makeFolio(
+func makeContent(
   _ sections: [(TestSectionID, [any Row<TestRowID>])]
-) -> Folio<TestSectionID, TestRowID> {
-  Folio(
+) -> Content<TestSectionID, TestRowID> {
+  Content(
     sections: sections.map { sectionID, rows in
       Section(id: sectionID, rows: rows)
     }
@@ -29,13 +29,13 @@ func makeFolio(
 }
 
 @MainActor
-func makeSingleSectionFolio(
+func makeSingleSectionContent(
   sectionID: TestSectionID,
   header: (any SectionHeader)? = nil,
   footer: (any SectionFooter)? = nil,
   rows: [any Row<TestRowID>]
-) -> Folio<TestSectionID, TestRowID> {
-  Folio(
+) -> Content<TestSectionID, TestRowID> {
+  Content(
     sections: [
       Section(
         id: sectionID,
@@ -49,7 +49,7 @@ func makeSingleSectionFolio(
 
 @MainActor
 func apply(
-  _ content: Folio<TestSectionID, TestRowID>,
+  _ content: Content<TestSectionID, TestRowID>,
   to folioView: FolioView<TestSectionID, TestRowID>,
   animated: Bool
 ) async {

@@ -27,7 +27,7 @@ extension FolioViewTests {
       onSelect: { oldSelectionCount += 1 }
     )
     await apply(
-      makeFolio([(.primary, [initialRow])]),
+      makeContent([(.primary, [initialRow])]),
       to: folioView,
       animated: false
     )
@@ -48,7 +48,7 @@ extension FolioViewTests {
       recorder: recorder
     )
     await apply(
-      makeFolio([
+      makeContent([
         (.primary, [updatedRow, insertedRow]),
         (.secondary, []),
       ]),
@@ -92,7 +92,7 @@ extension FolioViewTests {
     )
 
     await apply(
-      makeFolio([(.primary, [initialRow]), (.secondary, [])]),
+      makeContent([(.primary, [initialRow]), (.secondary, [])]),
       to: folioView,
       animated: false
     )
@@ -105,7 +105,7 @@ extension FolioViewTests {
       onSelect: { selectionRecorder.values.append("moved") }
     )
     await apply(
-      makeFolio([(.secondary, [movedRow]), (.primary, [])]),
+      makeContent([(.secondary, [movedRow]), (.primary, [])]),
       to: folioView,
       animated: true
     )
@@ -119,7 +119,7 @@ extension FolioViewTests {
 
   @Test
   @MainActor
-  func applyingEmptyFolioRemovesAllContent() async {
+  func applyingEmptyContentRemovesAllRowsAndSections() async {
     let recorder = SizingRecorder()
     let host = FolioViewHost(
       style: .plain,
@@ -129,7 +129,7 @@ extension FolioViewTests {
     defer { host.tearDown() }
 
     await apply(
-      makeFolio([
+      makeContent([
         (
           .primary,
           [
@@ -148,7 +148,7 @@ extension FolioViewTests {
     )
     #expect(folioView.numberOfSections == 2)
 
-    await apply(Folio(), to: folioView, animated: true)
+    await apply(Content(), to: folioView, animated: true)
     folioView.layoutIfNeeded()
 
     #expect(folioView.numberOfSections == 0)

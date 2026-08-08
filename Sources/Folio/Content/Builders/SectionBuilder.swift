@@ -1,6 +1,6 @@
 // Copyright © 2026 Daniel Inoa.
 
-/// Collects sections from a declarative `Folio` closure.
+/// Collects sections from a declarative `Content` closure.
 /// It flattens ordinary Swift control flow into one ordered section array.
 /// This keeps snapshot construction concise without changing identity or rendering.
 @resultBuilder

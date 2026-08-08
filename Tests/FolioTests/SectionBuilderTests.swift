@@ -9,8 +9,8 @@ import Testing
 struct SectionBuilderTests {
   @Test
   func emptyBuilderAndDefaultInitializerProduceEmptySnapshots() {
-    let built = Folio<BuilderSectionID, TestRowID> {}
-    let defaulted = Folio<BuilderSectionID, TestRowID>()
+    let built = Content<BuilderSectionID, TestRowID> {}
+    let defaulted = Content<BuilderSectionID, TestRowID>()
 
     #expect(built.sections.isEmpty)
     #expect(defaulted.sections.isEmpty)
@@ -36,7 +36,7 @@ struct SectionBuilderTests {
     ) {
       AlternateRow(id: .first)
     }
-    let content = Folio {
+    let content = Content {
       primary
       Section(id: .optional) {
         AlternateRow(id: .second)
@@ -52,12 +52,12 @@ struct SectionBuilderTests {
 
   @Test
   func builderSupportsConditionalBranchesAndSwitches() {
-    let included = makeConditionalFolio(
+    let included = makeConditionalContent(
       includeOptional: true,
       useFirstChoice: true,
       branch: .second
     )
-    let omitted = makeConditionalFolio(
+    let omitted = makeConditionalContent(
       includeOptional: false,
       useFirstChoice: false,
       branch: .first
@@ -84,7 +84,7 @@ struct SectionBuilderTests {
       Section(id: .helper(1), rows: []),
       Section(id: .helper(2), rows: []),
     ]
-    let content = Folio<BuilderSectionID, TestRowID> {
+    let content = Content<BuilderSectionID, TestRowID> {
       for value in [1, 2] {
         Section(id: .generated(value), rows: [])
       }
@@ -103,7 +103,7 @@ struct SectionBuilderTests {
 
   @Test
   func builderSupportsAvailabilityChecks() {
-    let content = Folio<BuilderSectionID, TestRowID> {
+    let content = Content<BuilderSectionID, TestRowID> {
       if #available(iOS 26, *) {
         futureSection()
       } else {
@@ -133,12 +133,12 @@ private enum SectionBuilderBranch {
 }
 
 @MainActor
-private func makeConditionalFolio(
+private func makeConditionalContent(
   includeOptional: Bool,
   useFirstChoice: Bool,
   branch: SectionBuilderBranch
-) -> Folio<BuilderSectionID, TestRowID> {
-  Folio {
+) -> Content<BuilderSectionID, TestRowID> {
+  Content {
     Section(id: .always, rows: [])
 
     if includeOptional {

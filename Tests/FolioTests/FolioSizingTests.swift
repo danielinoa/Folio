@@ -14,7 +14,7 @@ extension FolioViewTests {
     let folioView = FolioView<TestSectionID, TestRowID>(style: .plain)
     let indexPath = IndexPath(row: 0, section: 0)
 
-    await apply(makeFolio([(.primary, [row])]), to: folioView, animated: false)
+    await apply(makeContent([(.primary, [row])]), to: folioView, animated: false)
     folioView.frame = CGRect(x: 0, y: 0, width: 321, height: 480)
 
     let firstHeight = folioView.tableView(folioView, heightForRowAt: indexPath)
@@ -47,7 +47,7 @@ extension FolioViewTests {
     let folioView = FolioView<TestSectionID, TestRowID>(style: .plain)
     let indexPath = IndexPath(row: 0, section: 0)
 
-    await apply(makeFolio([(.primary, [row])]), to: folioView, animated: false)
+    await apply(makeContent([(.primary, [row])]), to: folioView, animated: false)
     folioView.frame = CGRect(x: 0, y: 0, width: 320, height: 480)
     _ = folioView.tableView(folioView, heightForRowAt: indexPath)
 
@@ -78,7 +78,7 @@ extension FolioViewTests {
     let folioView = host.folioView
     defer { host.tearDown() }
     let indexPath = IndexPath(row: 0, section: 0)
-    await apply(makeFolio([(.primary, [row])]), to: folioView, animated: false)
+    await apply(makeContent([(.primary, [row])]), to: folioView, animated: false)
     folioView.layoutIfNeeded()
     let firstHeight = folioView.rectForRow(at: indexPath).height
 

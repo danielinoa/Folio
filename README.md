@@ -10,8 +10,9 @@ Requires iOS 18 or newer, Swift 6.3 or newer, and programmatic UIKit views.
 
 ## Installation
 
-Add `https://github.com/danielinoa/Folio.git` through Swift Package Manager, then
-link the `Folio` product to your target.
+Add `https://github.com/danielinoa/Folio.git` through Swift Package Manager. Use
+the **Up to Next Minor Version** rule starting at `0.1.0`, then link the `Folio`
+product to your target.
 
 ## Usage
 
@@ -48,11 +49,11 @@ struct MessageRow: Row {
 }
 
 @MainActor
-func makeFolio(
+func makeContent(
   notificationsEnabled: Bool,
   channels: [Channel]
-) -> Folio<SectionID, RowID> {
-  Folio {
+) -> Content<SectionID, RowID> {
+  Content {
     Section(id: .main) {
       MessageRow(
         id: .notifications,
@@ -75,18 +76,18 @@ var notificationsEnabled = false
 let channels = [Channel(id: UUID(), name: "Product updates")]
 
 tableView.apply(
-  makeFolio(notificationsEnabled: notificationsEnabled, channels: channels),
+  makeContent(notificationsEnabled: notificationsEnabled, channels: channels),
   animatingDifferences: false
 )
 
 notificationsEnabled = true
 tableView.apply(
-  makeFolio(notificationsEnabled: notificationsEnabled, channels: channels),
+  makeContent(notificationsEnabled: notificationsEnabled, channels: channels),
   rowReconfiguration: .only([.notifications])
 )
 ```
 
-State changes render by rebuilding and applying the complete `Folio`. Use a
+State changes render by rebuilding and applying the complete `Content`. Use a
 nonanimated first apply; later applies animate by default.
 
 By default, every retained row is reconfigured. To preserve transient state when
@@ -97,7 +98,7 @@ when only structural differences need to be applied.
 Use the direct array initializer when imperative construction is a better fit:
 
 ```swift
-let folio = Folio<SectionID, RowID>(
+let content = Content<SectionID, RowID>(
   sections: [
     Section(
       id: .main,
